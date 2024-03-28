@@ -11,14 +11,14 @@ import 'entity/User.dart';
 
 class BaseDao{
   static late Isar db;
-  static final rootDir = path.join(Directory.current.path, '.dart_tool', 'isar');
+  // static final rootDir = path.join(Directory.current.path, '.dart_tool', 'isar');
 
   static init() async{
-    await Directory(rootDir ).create(recursive: true);
-    // final dir = await getApplicationDocumentsDirectory();
+    // await Directory(rootDir ).create(recursive: true);
+    final dir = await getApplicationDocumentsDirectory();
     db = await Isar.open(
       [UserSchema, RecordSchema, NoteSchema, LoginSchema],
-      directory: rootDir,
+      directory: dir.path,
       inspector: true,
     );
   }

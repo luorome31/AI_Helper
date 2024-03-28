@@ -71,7 +71,7 @@ P _loginDeserializeProp<P>(
 }
 
 Id _loginGetId(Login object) {
-  return object.isLogin ?? Isar.autoIncrement;
+  return object.isLogin;
 }
 
 List<IsarLinkBase<dynamic>> _loginGetLinks(Login object) {
@@ -158,23 +158,7 @@ extension LoginQueryWhere on QueryBuilder<Login, Login, QWhereClause> {
 }
 
 extension LoginQueryFilter on QueryBuilder<Login, Login, QFilterCondition> {
-  QueryBuilder<Login, Login, QAfterFilterCondition> isLoginIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'isLogin',
-      ));
-    });
-  }
-
-  QueryBuilder<Login, Login, QAfterFilterCondition> isLoginIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'isLogin',
-      ));
-    });
-  }
-
-  QueryBuilder<Login, Login, QAfterFilterCondition> isLoginEqualTo(Id? value) {
+  QueryBuilder<Login, Login, QAfterFilterCondition> isLoginEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isLogin',
@@ -184,7 +168,7 @@ extension LoginQueryFilter on QueryBuilder<Login, Login, QFilterCondition> {
   }
 
   QueryBuilder<Login, Login, QAfterFilterCondition> isLoginGreaterThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -197,7 +181,7 @@ extension LoginQueryFilter on QueryBuilder<Login, Login, QFilterCondition> {
   }
 
   QueryBuilder<Login, Login, QAfterFilterCondition> isLoginLessThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -210,8 +194,8 @@ extension LoginQueryFilter on QueryBuilder<Login, Login, QFilterCondition> {
   }
 
   QueryBuilder<Login, Login, QAfterFilterCondition> isLoginBetween(
-    Id? lower,
-    Id? upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {

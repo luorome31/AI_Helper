@@ -53,12 +53,7 @@ int _recordEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.path;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.path.length * 3;
   return bytesCount;
 }
 
@@ -80,10 +75,10 @@ Record _recordDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Record(
-    createTime: reader.readDateTimeOrNull(offsets[0]),
+    createTime: reader.readDateTime(offsets[0]),
     id: id,
-    path: reader.readStringOrNull(offsets[1]),
-    userId: reader.readLongOrNull(offsets[2]),
+    path: reader.readString(offsets[1]),
+    userId: reader.readLong(offsets[2]),
   );
   return object;
 }
@@ -96,18 +91,18 @@ P _recordDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
 Id _recordGetId(Record object) {
-  return object.id ?? Isar.autoIncrement;
+  return object.id;
 }
 
 List<IsarLinkBase<dynamic>> _recordGetLinks(Record object) {
@@ -194,24 +189,8 @@ extension RecordQueryWhere on QueryBuilder<Record, Record, QWhereClause> {
 }
 
 extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
-  QueryBuilder<Record, Record, QAfterFilterCondition> createTimeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createTime',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> createTimeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createTime',
-      ));
-    });
-  }
-
   QueryBuilder<Record, Record, QAfterFilterCondition> createTimeEqualTo(
-      DateTime? value) {
+      DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'createTime',
@@ -221,7 +200,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> createTimeGreaterThan(
-    DateTime? value, {
+    DateTime value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -234,7 +213,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> createTimeLessThan(
-    DateTime? value, {
+    DateTime value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -247,8 +226,8 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> createTimeBetween(
-    DateTime? lower,
-    DateTime? upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -263,23 +242,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Record, Record, QAfterFilterCondition> idIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> idIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> idEqualTo(Id? value) {
+  QueryBuilder<Record, Record, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -289,7 +252,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> idGreaterThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -302,7 +265,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> idLessThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -315,8 +278,8 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> idBetween(
-    Id? lower,
-    Id? upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -331,24 +294,8 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Record, Record, QAfterFilterCondition> pathIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'path',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> pathIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'path',
-      ));
-    });
-  }
-
   QueryBuilder<Record, Record, QAfterFilterCondition> pathEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -361,7 +308,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> pathGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -376,7 +323,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> pathLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -391,8 +338,8 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> pathBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -476,24 +423,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Record, Record, QAfterFilterCondition> userIdIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'userId',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> userIdIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'userId',
-      ));
-    });
-  }
-
-  QueryBuilder<Record, Record, QAfterFilterCondition> userIdEqualTo(
-      int? value) {
+  QueryBuilder<Record, Record, QAfterFilterCondition> userIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'userId',
@@ -503,7 +433,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> userIdGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -516,7 +446,7 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> userIdLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -529,8 +459,8 @@ extension RecordQueryFilter on QueryBuilder<Record, Record, QFilterCondition> {
   }
 
   QueryBuilder<Record, Record, QAfterFilterCondition> userIdBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -666,19 +596,19 @@ extension RecordQueryProperty on QueryBuilder<Record, Record, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Record, DateTime?, QQueryOperations> createTimeProperty() {
+  QueryBuilder<Record, DateTime, QQueryOperations> createTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createTime');
     });
   }
 
-  QueryBuilder<Record, String?, QQueryOperations> pathProperty() {
+  QueryBuilder<Record, String, QQueryOperations> pathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'path');
     });
   }
 
-  QueryBuilder<Record, int?, QQueryOperations> userIdProperty() {
+  QueryBuilder<Record, int, QQueryOperations> userIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'userId');
     });
